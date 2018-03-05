@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ethervote.io</title>
+<link rel="shortcut icon" href="images/ethervoteico.png" type="image/x-icon" />
+<link rel="stylesheet" href="css/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="js/index.js"></script>
+</head>
+<body>
+
+<ul class="navbar">
+  <div class="innerNavbar">
+    <li id="Logo"><img src="images/ethervotelogosmall.png"></img></li>
+    <li class="navbarButton"><a href="#home">Current Vote</a></li>
+    <li class="navbarButton"><a href="./pastVotes.html">Past Votes</a></li>
+    <li class="navbarButton"><a href="#contact">Smart Contract</a></li>
+    <li class="navbarButton"><a href="http://medium.com/@admin_50936">Our Blog</a></li>
+    <li id="accountAddress" style="float:right;"><p>Not connected to Metamask</p></li>
+  </div>
+</ul>
+
+<!-- <video autoplay muted loop id="myVideo">
+  <source src="images/webBG.mp4" type="video/mp4">
+</video>
+-->
+
+<div id="mainDiv">
+
+  <br>
+  <br>
+  <br>
+  
+  <h1>Overview</h1>
+  <table id="toolTip1"><tr><td><img src="images/ethereumlogowhite.png"></img></td><td><p>Ethervote is a decentralized application running on the Ethereum blockchain. Anyone can view the contract's code at any time to verify that the game is fair for everyone involved.</p></td></tr></table>
+  <table id="toolTip2"><tr><td><p>To play the game you simply vote for one of the two options available by sending ether to our contract in return for shares of your choice. Your ether is added to the Pot. At the end of the game period, the option with the most votes win, and the Pot is ditributed evenly to all the holders of the winning shares.</p><td><td><img src="images/potsymbol.png"></img></td></tr></table>
+  <br>
+  <hr>
+  <br>
+  <h1><span style="color:white;">Current Pot: </span><span id="potValue">1.53</span><span style="color:white;"> Eth</span></h1>
+  <br>
+  
+  <div id="voteOptionsContainer">
+    <div class="gallery" class="block">
+      <a target="_blank" href="">
+      <img src="images/batman.jpg" width="300" height="200"></img>
+      </a>
+      
+      <div class="desc">
+      <p id="leftVotesCasted" style="color:black;">Votes casted: 10</p>
+      <p id="leftVotePrice" style="color:black;">Price: 0.01 Eth</p>
+      </div>
+      <button class="buyButton" onclick = "App.castVote(true); alert('casting vote'); return false; ">Buy Batman</button>
+    </div>
+    
+    <div class="gallery" class="block">
+      <a target="_blank" href="">
+      <img src="images/superman.jpg" width="300" height="200">
+      </a>
+      <div class="desc">
+      <p id="rightVotesCasted" style="color:black;">Votes casted: 95</p>
+      <p id="rightVotePrice" style="color:black;">Price: 0.025 Eth</p>
+      </div>
+      <button class="buyButton">Buy Superman</button>
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <br>
+  <p id="blockCounter">Current Block:</p>
+  <br>
+  <br>
+  <hr>
+  <br>
+  <br>
+  <br>
+  <h2>Ethervote Contract #1 - January 28</h2>
+  <br>
+  <p style="margin-left:20%;margin-right:20%;">In this week's contract, Batman squares off against his comic-book counterpart, Superman. The share prices for each superhero increases every time a vote is cast -- up to around one hundred votes -- following the chart below:</p>
+  <br>
+  <canvas id="priceChart" ></canvas>
+  <br>
+  <br>
+  <p>Below are the stats for dominance of this week's prize pool:</p>
+  <br>
+  <canvas id="dominanceChart"></canvas>
+</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
