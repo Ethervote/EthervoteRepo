@@ -6,7 +6,7 @@ contract Ethervote {
     
     address[] playerAddresses;
     
-    uint expiryBlock;
+    uint public expiryBlock;
     
     uint public leftSharePrice = 10 finney;
     uint public rightSharePrice = 10 finney;
@@ -109,7 +109,7 @@ contract Ethervote {
     }
     
     
-    function settleBet() public isOwner {
+    function settleBet() public {
         require(block.number >= expiryBlock);
         
         uint winReward = thePot * 3;
@@ -138,7 +138,28 @@ contract Ethervote {
                     }
                 }
             }
-        }//make a tie breaker
+        }else if(rightVotes == leftVotes){//split it in a tie
+            uint rightWinReward = (winReward / rightVotes) / 2;
+            for(uint q=0;q<playerAddresses.length;q++){
+                if(players[playerAddresses[q]].rightShares > 0){
+                    if(playerAddresses[q].send(players[playerAddresses[q]].rightShares * rightWinReward) == false){
+                        //if the send fails
+                        players[playerAddresses[q]].excessEther = players[playerAddresses[q]].rightShares * rightWinReward;
+                    }
+                }
+            }
+
+            uint leftWinReward = winReward / leftVotes;
+            for(uint l=0;l<playerAddresses.length;l++){
+                if(players[playerAddresses[l]].leftShares > 0){
+                    if(playerAddresses[l].send(players[playerAddresses[l]].leftShares * leftWinReward) == false){
+                        //if the send fails
+                        players[playerAddresses[l]].excessEther = players[playerAddresses[l]].leftShares * leftWinReward;
+                    }
+                }
+            }
+
+        }
     }
     
     

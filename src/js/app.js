@@ -8,7 +8,6 @@ App = {
   },
 
   initWeb3: function() {
-    // TODO: refactor conditional
     if (typeof web3 !== 'undefined') {
       // If a web3 instance is already provided by Meta Mask.
       App.web3Provider = web3.currentProvider;
@@ -17,6 +16,7 @@ App = {
       // Specify default instance if no web3 instance provided
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
       web3 = new Web3(App.web3Provider);
+      notConnectedDialog.showModal();
     }
     return App.initContract();
   },
@@ -67,58 +67,56 @@ App = {
     // Load contract data
     App.contracts.Ethervote.deployed().then(function(instance) {
       ethervoteInstance = instance;
-      var leftVotesForChart = 0;
 
       return ethervoteInstance.leftSharePrice();
     }).then(function(leftSharePrice) {
-      $("#leftVotePrice").html("Price: " + (leftSharePrice / 1000000000000000000));
-
+      lsp = Number(web3.fromWei(leftSharePrice.toNumber(), "ether" ));
+      $("#leftVotePrice").html("Price: " + lsp);
       return ethervoteInstance.rightSharePrice();
     }).then(function(rightSharePrice){
-      $("#rightVotePrice").html("Price: " + (rightSharePrice / 1000000000000000000));
-
+      rsp = Number(web3.fromWei(rightSharePrice.toNumber(), "ether" ));
+      $("#rightVotePrice").html("Price: " + rsp);
       return ethervoteInstance.leftVotes();
     }).then(function(leftVotes){
       $("#leftVotesCasted").html("Votes casted: " + leftVotes);
-      leftVotesForChart = leftVotes;
-
+      lv = leftVotes.toNumber();
       return ethervoteInstance.rightVotes();
     }).then(function(rightVotes){
       $("#rightVotesCasted").html("Votes casted: " + rightVotes);
-
-      var dominanceCtx = document.getElementById('dominanceChart').getContext('2d');
-      var myPieChart = new Chart(dominanceCtx,{
-          type: 'pie',
-          data: {
-            datasets: [{
-                data: [1, 2],
-                backgroundColor: ["#252D5C","#BD9028"]
-            }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: [
-                'Batman',
-                'Superman',
-            ],
-          },
-          options: {
-            cutoutPercentage: 50
-
-          }
-        });
-
+      rv = rightVotes.toNumber();
+      return ethervoteInstance.leftSharePriceRateOfIncrease();
+    }).then(function(leftSharePriceRateOfIncrease){
+      lsproi = Number(web3.fromWei(leftSharePriceRateOfIncrease.toNumber(), "ether" ));
+      return ethervoteInstance.rightSharePriceRateOfIncrease();
+    }).then(function(rightSharePriceRateOfIncrease){
+      rsproi = Number(web3.fromWei(rightSharePriceRateOfIncrease.toNumber(), "ether" ));
       return ethervoteInstance.thePot();
     }).then(function(thePot){
       $("#potValue").html(thePot / 1000000000000000000);
+      return ethervoteInstance.expiryBlock();
+    }).then(function(_expiryBlock){
+      expiryBlock = _expiryBlock.toNumber();
+
+      web3.eth.getBlockNumber(function(error, _blockNum){
+        blockNum = _blockNum;
+        var distance = (expiryBlock - blockNum) * 15000
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+        $("#blockCounter").html("<span style='color:white; font-size: 14pt; font-weight: 400;'>Contract ends in: <br>" + days + " days, " + hours + " hours, " + minutes + " minutes</span><br> ( Expiry Block: " + expiryBlock+" )");
+      });
+
     }).catch(function(error) {
       console.warn(error);
-      alert(error);
+      //alert(error);
+      notConnectedDialog.showModal();
     });
 
-    web3.eth.getBlockNumber(function(blockNum){
-      $("#blockCounter").html("Current BBBlock: " + blockNum);
-    });
+
     
+    
+
   },
 
   castVote: function(votingForLeft) {/*
@@ -132,7 +130,7 @@ App = {
     });*/
 	
 	App.contracts.Ethervote.deployed().then(function(instance) {
-      return instance.bet(true, { from: App.account, value: 100000000000000000});
+      return instance.bet(votingForLeft, { from: App.account, value: web3.toWei($("#etherCostDialog").html(),"ether")});
     }).then(function(result) {
       for (var i = 0; i < result.logs.length; i++) {
         var log = result.logs[i];
@@ -140,9 +138,11 @@ App = {
         console.log(log);
       }
       // Wait for votes to update
-      alert('successful vote');
+      $("#page-mask").hide();
+      document.getElementById('buyDialog').close();
+      transactionSentDialog.showModal();
     }).catch(function(err) {
-      alert('failed vote');
+      //alert('failed vote');
       console.error(err);
     });
 	

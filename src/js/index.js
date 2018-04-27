@@ -1,3 +1,14 @@
+var modalVotingLeft = false,
+lsp = 0.01,
+rsp = 0.01,
+lsproi = 0.001,
+rsproi = 0.001,
+lv = 0,
+rv = 0,
+blockNum = 0,
+expiryBlock = 0;
+
+
 $(function() {
 	$('#Logo').css('paddingLeft', (window.innerWidth / 13.3) +'px');
 	$('#mainDiv').css('width', window.innerWidth * 0.9 +'px');
@@ -58,24 +69,125 @@ var chart = new Chart(priceCtx, {
     options: {}
 });
 
-/*
-var dominanceCtx = document.getElementById('dominanceChart').getContext('2d');
-var myPieChart = new Chart(dominanceCtx,{
-    type: 'pie',
-    data: data = {
-    datasets: [{
-        data: [10, 20]
-    }],
 
-    // These labels appear in the legend and in the tooltips when hovering different arcs
-    labels: [
-        'Batman',
-        'Superman',
-    ]
-},
-    options: {}
+var notConnectedDialog = document.querySelector('#notConnectedDialog');
+dialogPolyfill.registerDialog(notConnectedDialog);
+
+$(".fox").on("click", function(){
+	notConnectedDialog.showModal();
+})
+
+$('#closeNotConnectedDialog').on('click', function() {
+	notConnectedDialog.close();
 });
-*/
+
+var transactionSentDialog = document.querySelector('#transactionSentDialog');
+dialogPolyfill.registerDialog(transactionSentDialog);
+
+
+$('#closeTransactionSentDialog').on('click', function() {
+	transactionSentDialog.close();
+});
+
+var buyDialog = document.querySelector('#buyDialog');
+dialogPolyfill.registerDialog(buyDialog);
+console.log(buyDialog.open);
+
+function openBuyModal(){
+	console.log(buyDialog.open);
+    buyDialog.showModal();
+    console.log(buyDialog.open);
+    modalVotingLeft ? $('#buyDialogVotesDesired').html('Batman Votes Desired:') : $('#buyDialogVotesDesired').html('Superman Votes Desired:');
+}
+
+$('.buyButton').on('click', function () {
+	openBuyModal();
+});
+
+$('.gallery img').on('click', function () {
+	openBuyModal();
+});
+
+$('#cancelDialog').on('click', function() {
+	buyDialog.close();
+});
+
+$("#buyDialogConfirmButton").css("backgroundColor", "#CCA033");
+$("#buyDialogConfirmButton:hover").css("backgroundColor", "#DDA727");
+
+$("#votesDesiredInput").bind('input', function() {
+
+	var voteNum = document.getElementById("votesDesiredInput").value;
+
+	if(isNaN(voteNum) || voteNum <= 0){
+			$("#etherCostDialog").html("0");
+			$("#buyDialogConfirmButton").click(function(){});//deactivate buy button
+			$("#buyDialogConfirmButton").css("backgroundColor", "#CCA033");
+			$("#buyDialogConfirmButton:hover").css("backgroundColor", "#DDA727");
+		} else if(voteNum >100000){
+			$("#etherCostDialog").html("Too many votes!");
+			$("#buyDialogConfirmButton").click(function(){});
+			$("#buyDialogConfirmButton").css("backgroundColor", "#CCA033");
+			$("#buyDialogConfirmButton:hover").css("backgroundColor", "#DDA727");
+		} else {
+
+			var totalEthPrice = 0,
+			plsp = lsp,//projected left share price
+			plsproi = lsproi,
+			plv = lv,
+			prsp = rsp,
+			prsproi = rsproi,
+			prv = rv;
+			
+			if(modalVotingLeft){
+				for(var i=0;i<voteNum;i++){
+					totalEthPrice += plsp;
+					plv++;
+
+					if(plv % 15 == 0){
+						plsp += plsproi;
+						if(plv <= 45){
+							plsproi += 0.001;
+						}else if(plsproi > 45){
+							if(plsproi > 0.001){
+                                plsproi -= 0.001;
+                            }else if(plsproi <= 0.001){
+                                plsproi = 0;
+                            }
+						}
+					}
+				}
+			}else if(!modalVotingLeft){
+				for(var i=0;i<voteNum;i++){
+					totalEthPrice += prsp;
+					prv++;
+
+					if(prv % 15 == 0){
+						prsp += prsproi;
+						if(prv <= 45){
+							prsproi += 0.001;
+						}else if(prsproi > 45){
+							if(prsproi > 0.001){
+                                prsproi -= 0.001;
+                            }else if(prsproi <= 0.001){
+                                prsproi = 0;
+                            }
+						}
+					}
+				}
+			}
+
+			$("#etherCostDialog").html(Math.round(totalEthPrice * 1000)/1000);
+
+			$("#buyDialogConfirmButton").click(function(){
+					App.castVote(modalVotingLeft);
+			});
+			$("#buyDialogConfirmButton").css("backgroundColor", "#FFBC05");
+			$("#buyDialogConfirmButton:hover").css("backgroundColor", "#FFC710");
+		}
+
+});
+
 
 });
 
