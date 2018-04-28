@@ -91,12 +91,9 @@ $('#closeTransactionSentDialog').on('click', function() {
 
 var buyDialog = document.querySelector('#buyDialog');
 dialogPolyfill.registerDialog(buyDialog);
-console.log(buyDialog.open);
 
 function openBuyModal(){
-	console.log(buyDialog.open);
     buyDialog.showModal();
-    console.log(buyDialog.open);
     modalVotingLeft ? $('#buyDialogVotesDesired').html('Batman Votes Desired:') : $('#buyDialogVotesDesired').html('Superman Votes Desired:');
 }
 

@@ -135,7 +135,6 @@ App = {
       for (var i = 0; i < result.logs.length; i++) {
         var log = result.logs[i];
 
-        console.log(log);
       }
       // Wait for votes to update
       $("#page-mask").hide();
