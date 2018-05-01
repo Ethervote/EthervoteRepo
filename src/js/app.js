@@ -90,7 +90,7 @@ App = {
       $("#yourLeftVotesCasted").html("Your votes: " + yourLeftVotes);
       return ethervoteInstance.viewMyShares.call(false);
     }).then(function(_yourRightVotes){
-      yourRightVotes = _yourRughtVotes;
+      yourRightVotes = _yourRightVotes;
       $("#yourRightVotesCasted").html("Your votes: " + yourRightVotes);
       return ethervoteInstance.leftSharePriceRateOfIncrease();
     }).then(function(leftSharePriceRateOfIncrease){
