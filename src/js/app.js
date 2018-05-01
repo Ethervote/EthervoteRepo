@@ -84,15 +84,16 @@ App = {
     }).then(function(rightVotes){
       $("#rightVotesCasted").html("Votes casted: " + rightVotes);
       rv = rightVotes.toNumber();
+      return ethervoteInstance.leftSharePriceRateOfIncrease();
+      /*
       return ethervoteInstance.viewMyShares(true);
     }).then(function(yourLeftVotes){
-      console.log(yourLeftVotes);
       $("#yourLeftVotesCasted").html("Your votes: " + yourLeftVotes);
       return ethervoteInstance.viewMyShares(false);
     }).then(function(yourRightVotes){
-      console.log(yourLeftVotes);
       $("#yourRightVotesCasted").html("Your votes: " + yourRightVotes);
       return ethervoteInstance.leftSharePriceRateOfIncrease();
+      */
     }).then(function(leftSharePriceRateOfIncrease){
       lsproi = Number(web3.fromWei(leftSharePriceRateOfIncrease.toNumber(), "ether" ));
       return ethervoteInstance.rightSharePriceRateOfIncrease();
