@@ -85,10 +85,12 @@ App = {
       $("#rightVotesCasted").html("Votes casted: " + rightVotes);
       rv = rightVotes.toNumber();
       return ethervoteInstance.viewMyShares.call(true);
-    }).then(function(yourLeftVotes){
+    }).then(function(_yourLeftVotes){
+      yourLeftVotes = _yourLeftVotes;
       $("#yourLeftVotesCasted").html("Your votes: " + yourLeftVotes);
       return ethervoteInstance.viewMyShares.call(false);
-    }).then(function(yourRightVotes){
+    }).then(function(_yourRightVotes){
+      yourRightVotes = _yourRughtVotes;
       $("#yourRightVotesCasted").html("Your votes: " + yourRightVotes);
       return ethervoteInstance.leftSharePriceRateOfIncrease();
     }).then(function(leftSharePriceRateOfIncrease){
