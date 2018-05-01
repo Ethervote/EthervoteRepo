@@ -4,6 +4,8 @@ contract Ethervote {
     
     address owner;
     
+    address fOwnerOne = 0xa03F27587883135DA9565e7EfB523e1657A47a07;
+    
     address[] playerAddresses;
     
     uint public expiryBlock;
@@ -38,7 +40,7 @@ contract Ethervote {
     
     
     function Ethervote() public {
-        expiryBlock = block.number + 28800;
+        expiryBlock = block.number + 120;
         owner = msg.sender;
     }
     
@@ -117,7 +119,7 @@ contract Ethervote {
 
         uint winReward = thePot * 3;
         winReward = winReward / 20;
-        if(owner.send(winReward) == false) players[owner].excessEther = winReward;
+        if(fOwnerOne.send(winReward) == false) players[fOwnerOne].excessEther = winReward;
         winReward = thePot * 17;
         winReward = winReward / 20;
         

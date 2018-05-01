@@ -6,7 +6,10 @@ rsproi = 0.001,
 lv = 0,
 rv = 0,
 blockNum = 0,
-expiryBlock = 0;
+expiryBlock = 0,
+betIsSettled,
+yourRightVotes = 0,
+yourLeftVotes = 0;
 
 
 $(function() {

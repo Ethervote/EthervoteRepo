@@ -84,16 +84,13 @@ App = {
     }).then(function(rightVotes){
       $("#rightVotesCasted").html("Votes casted: " + rightVotes);
       rv = rightVotes.toNumber();
-      return ethervoteInstance.leftSharePriceRateOfIncrease();
-      /*
-      return ethervoteInstance.viewMyShares(true);
+      return ethervoteInstance.viewMyShares.call(true);
     }).then(function(yourLeftVotes){
       $("#yourLeftVotesCasted").html("Your votes: " + yourLeftVotes);
-      return ethervoteInstance.viewMyShares(false);
+      return ethervoteInstance.viewMyShares.call(false);
     }).then(function(yourRightVotes){
       $("#yourRightVotesCasted").html("Your votes: " + yourRightVotes);
       return ethervoteInstance.leftSharePriceRateOfIncrease();
-      */
     }).then(function(leftSharePriceRateOfIncrease){
       lsproi = Number(web3.fromWei(leftSharePriceRateOfIncrease.toNumber(), "ether" ));
       return ethervoteInstance.rightSharePriceRateOfIncrease();
@@ -116,8 +113,9 @@ App = {
         $("#blockCounter").html("<span style='color:white; font-size: 14pt; font-weight: 400;'>Contract ends in: <br>" + days + " days, " + hours + " hours, " + minutes + " minutes</span><br> ( Expiry Block: " + expiryBlock+" )");
       })
       return ethervoteInstance.betIsSettled();
-    }).then(function(betIsSettled){
-        if(expiryBlock <= blockNum){console.log(betIsSettled);
+    }).then(function(_betIsSettled){
+      betIsSettled = _betIsSettled;
+        if(expiryBlock <= blockNum){
           if(!betIsSettled){
             $("#blockCounter").html("<button onclick='App.settleBet();return(false);'>Resolve Contract</button><br><p>NOTE: Don't click this if you don't know what you're doing, you'll just waste gas.</p>");
           }else{
