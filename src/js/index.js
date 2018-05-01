@@ -89,6 +89,14 @@ $('#closeTransactionSentDialog').on('click', function() {
 	transactionSentDialog.close();
 });
 
+var transactionOutboundDialog = document.querySelector('#transactionOutboundDialog');
+dialogPolyfill.registerDialog(transactionOutboundDialog);
+
+
+$('#closetransactionOutboundDialog').on('click', function() {
+	transactionOutboundDialog.close();
+});
+
 var buyDialog = document.querySelector('#buyDialog');
 dialogPolyfill.registerDialog(buyDialog);
 
@@ -145,7 +153,7 @@ $("#votesDesiredInput").bind('input', function() {
 						plsp += plsproi;
 						if(plv <= 45){
 							plsproi += 0.001;
-						}else if(plsproi > 45){
+						}else if(plv > 45){
 							if(plsproi > 0.001){
                                 plsproi -= 0.001;
                             }else if(plsproi <= 0.001){
@@ -163,7 +171,7 @@ $("#votesDesiredInput").bind('input', function() {
 						prsp += prsproi;
 						if(prv <= 45){
 							prsproi += 0.001;
-						}else if(prsproi > 45){
+						}else if(prv > 45){
 							if(prsproi > 0.001){
                                 prsproi -= 0.001;
                             }else if(prsproi <= 0.001){

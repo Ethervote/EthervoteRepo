@@ -1,5 +1,5 @@
 body {
-   background-color: #aaaaff;
+   background-image: url("../images/vidpreview.jpg");
 }
 
 /*::-moz-selection { background: #f1c40f; color: black; font-weight: 575;}*/
@@ -207,6 +207,12 @@ div.gallery img {
 div.desc {
     padding: 5px;
     text-align: center;
+}
+
+div.desc p{
+    margin-top:12px;
+    margin-bottom:12px;
+    font-weight:320;
 }
 
 .buyButton {

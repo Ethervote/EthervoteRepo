@@ -14,7 +14,7 @@ App = {
       web3 = new Web3(web3.currentProvider);
     } else {
       // Specify default instance if no web3 instance provided
-      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+      App.web3Provider = new Web3.providers.HttpProvider("https://ropsten.infura.io/DPWCCWKE4HS53tNE7xFo");
       web3 = new Web3(App.web3Provider);
       notConnectedDialog.showModal();
     }
@@ -84,6 +84,12 @@ App = {
     }).then(function(rightVotes){
       $("#rightVotesCasted").html("Votes casted: " + rightVotes);
       rv = rightVotes.toNumber();
+      return ethervoteInstance.viewMyShares(true);
+    }).then(function(yourLeftVotes){
+      $("#yourLeftVotesCasted").html("Your votes: " + yourLeftVotes);
+      return ethervoteInstance.viewMyShares(false);
+    }).then(function(yourRightVotes){
+      $("#yourRightVotesCasted").html("Your votes: " + yourRightVotes);
       return ethervoteInstance.leftSharePriceRateOfIncrease();
     }).then(function(leftSharePriceRateOfIncrease){
       lsproi = Number(web3.fromWei(leftSharePriceRateOfIncrease.toNumber(), "ether" ));
@@ -105,9 +111,17 @@ App = {
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
         $("#blockCounter").html("<span style='color:white; font-size: 14pt; font-weight: 400;'>Contract ends in: <br>" + days + " days, " + hours + " hours, " + minutes + " minutes</span><br> ( Expiry Block: " + expiryBlock+" )");
-      });
-
-    }).catch(function(error) {
+      })
+      return ethervoteInstance.betIsSettled();
+    }).then(function(betIsSettled){
+        if(expiryBlock <= blockNum){console.log(betIsSettled);
+          if(!betIsSettled){
+            $("#blockCounter").html("<button onclick='App.settleBet();return(false);'>Resolve Contract</button><br><p>NOTE: Don't click this if you don't know what you're doing, you'll just waste gas.</p>");
+          }else{
+            $("#blockCounter").html("<span style='color:white; font-size: 14pt; font-weight: 400;'>This voting period has finished and the rewards have been sent out.<br>Tune in soon for another bet!</span>");
+          }
+        }
+      }).catch(function(error) {
       console.warn(error);
       //alert(error);
       notConnectedDialog.showModal();
@@ -130,6 +144,8 @@ App = {
     });*/
 	
 	App.contracts.Ethervote.deployed().then(function(instance) {
+      buyDialog.close();
+      transactionOutboundDialog.showModal();
       return instance.bet(votingForLeft, { from: App.account, value: web3.toWei($("#etherCostDialog").html(),"ether")});
     }).then(function(result) {
       for (var i = 0; i < result.logs.length; i++) {
@@ -137,15 +153,22 @@ App = {
 
       }
       // Wait for votes to update
-      $("#page-mask").hide();
       document.getElementById('buyDialog').close();
+      transactionOutboundDialog.close();
       transactionSentDialog.showModal();
+      App.render();
     }).catch(function(err) {
       //alert('failed vote');
       console.error(err);
     });
 	
 	
+  },
+
+  settleBet: function(){
+    App.contracts.Ethervote.deployed().then(function(instance) {
+      return instance.settleBet();
+    });
   }
 };
 /*

@@ -19,6 +19,8 @@ contract Ethervote {
     
     uint public thePot = 0 wei;
     
+    bool public betIsSettled = false;
+
     struct Player {
         uint leftShares;
         uint rightShares;
@@ -36,7 +38,7 @@ contract Ethervote {
     
     
     function Ethervote() public {
-        expiryBlock = block.number + 150;
+        expiryBlock = block.number + 28800;
         owner = msg.sender;
     }
     
@@ -111,7 +113,8 @@ contract Ethervote {
     
     function settleBet() public {
         require(block.number >= expiryBlock);
-        
+        require(betIsSettled == false);
+
         uint winReward = thePot * 3;
         winReward = winReward / 20;
         if(owner.send(winReward) == false) players[owner].excessEther = winReward;
@@ -160,6 +163,8 @@ contract Ethervote {
             }
 
         }
+
+        betIsSettled = true;
     }
     
     

@@ -17,7 +17,7 @@
 
 <ul class="navbar">
   <div class="innerNavbar">
-    <li id="Logo"><img src="images/ethervotelogosmall.jpg"></img></li>
+    <li id="Logo"><img src="https://drive.google.com/uc?id=1dMWgeDO1gHUPdAnFjIq2YPm7GMD0hudK"></img></li>
     <li class="navbarButton"><a href="#home">Current Vote</a></li>
     <li class="navbarButton"><a href="./pastVotes.html">Past Votes</a></li>
     <li class="navbarButton"><a href="#contact">Smart Contract</a></li>
@@ -27,7 +27,7 @@
 </ul>
 
 <video autoplay muted loop id="myVideo">
-  <source src="images/webBG.mp4" type="video/mp4">
+  <source src="https://drive.google.com/uc?id=13w6ZLPHx36YhDkWxJs99HKitVQeSGqQa" type="video/mp4">
 </video>
 
 <div id="mainDiv">
@@ -55,6 +55,7 @@
       
       <div class="desc">
       <p id="leftVotesCasted" style="color:black;">Votes casted: <a class="fox" style="color: blue; font-weight: bold;">0*</a></p>
+      <p id="yourLeftVotesCasted" style="color:black;">Your votes: <a class="fox" style="color: blue; font-weight: bold;">0*</a></p>
       <p id="leftVotePrice" style="color:black;">Price: <a class="fox" style="color: blue; font-weight: bold;">0*</a> Eth</p>
       </div>
       <button class="buyButton" onclick = "modalVotingLeft = true;/*App.castVote(true); alert('casting vote'); return false; */">Buy Batman</button>
@@ -66,6 +67,7 @@
 
       <div class="desc">
       <p id="rightVotesCasted" style="color:black;">Votes casted: <a class="fox" style="color: blue; font-weight: bold;">0*</a></p>
+      <p id="yourRightVotesCasted" style="color:black;">Your votes: <a class="fox" style="color: blue; font-weight: bold;">0*</a></p>
       <p id="rightVotePrice" style="color:black;">Price: <a class="fox" style="color: blue; font-weight: bold;">0*</a> Eth</p>
       </div>
       <button class="buyButton" onclick = "modalVotingLeft = false;/*App.castVote(false); alert('casting vote'); return false;*/ ">Buy Superman</button>
@@ -119,7 +121,7 @@
 
 <dialog id="notConnectedDialog" role="dialog">
 
-  <h3>Not Connected to the Ethereum Network!</h3>
+  <h3>Not Connected to the Ethereum Network</h3>
   <br>
   <br>
       <section>
@@ -132,19 +134,39 @@
 
 </dialog>
 
-<dialog id="transactionSentDialog" role="dialog">
+<dialog id="transactionOutboundDialog" role="dialog">
 
-  <h3>Transaction has been sent!</h3>
+  <h3>Confirm Transaction</h3>
   <br>
   <br>
       <section>
-            <p>Contingent on the gas price you used and the state of the network, you transaction will be confirmed shortly. Refresh the page soon to see the results of your transaction!<p>
+            <p>Please confirm the transaction, and we'll let you know when the network recieves it. If you're not sure what to put as the gas limit, visit the <a href="https://ethgasstation.info/">Eth Gas Station</a>.<p>
       </section>
     <br>
     <br>
     <br>
     <br>
 
+    <button class="dialogButton" id="closetransactionOutboundDialog" type="reset">Close</button>
+
+</dialog>
+
+
+</dialog>
+
+<dialog id="transactionSentDialog" role="dialog">
+
+  <h3>Transaction Confirmed</h3>
+  <br>
+  <br>
+      <section>
+            <p>Your transaction has been confirmed!<p>
+      </section>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <button class="dialogButton" id="closeTransactionSentDialog" type="reset">Close</button>
 
 </dialog>

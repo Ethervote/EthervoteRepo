@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "dialog-polyfill": "^0.4.9",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "truffle-hdwallet-provider": "0.0.3"
   }
 }
