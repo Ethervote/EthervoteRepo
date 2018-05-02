@@ -40,7 +40,7 @@ contract Ethervote {
     
     
     function Ethervote() public {
-        expiryBlock = block.number + 120;
+        expiryBlock = block.number + 1200;
         owner = msg.sender;
     }
     

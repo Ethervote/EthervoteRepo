@@ -1,3 +1,20 @@
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: grey;
+    color: black;
+    text-align: center;
+}
+
+.footer p {
+    color: black;
+    font-weight: normal;
+}
+
+
+
 body {
    background-image: url("../images/vidpreview.jpg");
 }
