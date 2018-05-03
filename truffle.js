@@ -1,5 +1,5 @@
 var HDWalletProvider = require("truffle-hdwallet-provider");
-var mnemonic = "silver increase aerobic clever loud people argue champion diary picture vocal issue";
+var mnemonic = "";
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -26,10 +26,11 @@ module.exports = {
     },
     live: {
       provider: function() {
-        return new HDWalletProvider(mnemonic, "https://mainnet.infura.io/DPWCCWKE4HS53tNE7xFo")
+        return new HDWalletProvider(mnemonic, "https://mainnet.infura.io/aBdQyWqGRiPfjq43RhJZ")
       },
       network_id: 6,
-      gas: 4612388
+      gas: 4012388,
+      gasPrice: 4000000000
     } 
   }
 };

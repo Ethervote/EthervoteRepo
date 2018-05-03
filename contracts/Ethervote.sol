@@ -2,10 +2,9 @@ pragma solidity ^0.4.11;
 
 contract Ethervote {
     
-    address owner;
-    
-    address fOwnerOne = 0xa03F27587883135DA9565e7EfB523e1657A47a07;
-    
+    address feeRecieverOne = 0xa03F27587883135DA9565e7EfB523e1657A47a07;
+    address feeRecieverTwo = 0x549377418b1b7030381de9aA1319E41C044467c7;
+
     address[] playerAddresses;
     
     uint public expiryBlock;
@@ -32,16 +31,9 @@ contract Ethervote {
     
     mapping(address => Player) players;
     
-    modifier isOwner {
-       if (msg.sender != owner) revert();
-        _;
-    }
     
-    
-    
-    function Ethervote() public {
-        expiryBlock = block.number + 1200;
-        owner = msg.sender;
+    function Ethervote() public payable {
+        expiryBlock = block.number + 17500;
     }
     
     function bet(bool bettingLeft) public payable {
@@ -117,10 +109,15 @@ contract Ethervote {
         require(block.number >= expiryBlock);
         require(betIsSettled == false);
 
-        uint winReward = thePot * 3;
-        winReward = winReward / 20;
-        if(fOwnerOne.send(winReward) == false) players[fOwnerOne].excessEther = winReward;
-        winReward = thePot * 17;
+        uint winRewardOne = thePot * 2;
+        winRewardOne = winRewardOne / 20;
+        if(feeRecieverOne.send(winRewardOne) == false) players[feeRecieverOne].excessEther = winRewardOne;//in case the tx fails, the excess ether function lets you withdraw it manually
+
+        uint winRewardTwo = thePot * 1;
+        winRewardTwo = winRewardTwo / 20;
+        if(feeRecieverTwo.send(winRewardTwo) == false) players[feeRecieverTwo].excessEther = winRewardTwo;
+
+        uint winReward = thePot * 17;
         winReward = winReward / 20;
         
         if(leftVotes > rightVotes){
@@ -175,14 +172,6 @@ contract Ethervote {
         if(msg.sender.send(players[msg.sender].excessEther)){
             players[msg.sender].excessEther = 0;
         }
-    }
-    
-    function viewMyExcessEther() public view returns(uint){
-        return players[msg.sender].excessEther;
-    }
-    
-    function viewBlockNumber() public view returns(uint){
-        return block.number;
     }
     
     function viewMyShares(bool left) public view returns(uint){
