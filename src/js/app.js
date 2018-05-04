@@ -112,7 +112,7 @@ App = {
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
-        $("#blockCounter").html("<span style='color:white; font-size: 14pt; font-weight: 400;'>Contract ends in: <br>" + days + " days, " + hours + " hours, " + minutes + " minutes</span><br> ( Expiry Block: " + expiryBlock+" )");
+        $("#blockCounter").html("<span style='color:white; font-size: 14pt; font-weight: 400;'>Betting period ends in: <br>" + days + " days, " + hours + " hours, " + minutes + " minutes</span><br> ( Expiry Block: " + expiryBlock+" )");
       })
       return ethervoteInstance.betIsSettled();
     }).then(function(_betIsSettled){

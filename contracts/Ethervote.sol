@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.23;
 
 contract Ethervote {
     
@@ -32,7 +32,7 @@ contract Ethervote {
     mapping(address => Player) players;
     
     
-    function Ethervote() public payable {
+    constructor() public {
         expiryBlock = block.number + 17500;
     }
     
